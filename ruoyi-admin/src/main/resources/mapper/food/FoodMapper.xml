@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.food.mapper.FoodMapper">
+    
+    <resultMap type="Food" id="FoodResult">
+        <result property="foodId"    column="food_id"    />
+        <result property="foodName"    column="food_name"    />
+        <result property="foodStar"    column="food_star"    />
+        <result property="foodVote"    column="food_vote"    />
+        <result property="foodPrice"    column="food_price"    />
+        <result property="foodDiscount"    column="food_discount"    />
+        <result property="foodDesc"    column="food_desc"    />
+        <result property="foodStatus"    column="food_status"    />
+        <result property="foodType"    column="food_type"    />
+        <result property="foodCategory"    column="food_category"    />
+        <result property="foodSrc"    column="food_src"    />
+    </resultMap>
+
+    <sql id="selectFoodVo">
+        select food_id, food_name, food_star, food_vote, food_price, food_discount, food_desc, food_status, food_type, food_category, food_src from food
+    </sql>
+
+    <select id="selectFoodList" parameterType="Food" resultMap="FoodResult">
+        <include refid="selectFoodVo"/>
+        <where>  
+            <if test="foodName != null  and foodName != ''"> and food_name like concat('%', #{foodName}, '%')</if>
+            <if test="foodStar != null  and foodStar != ''"> and food_star = #{foodStar}</if>
+            <if test="foodVote != null  and foodVote != ''"> and food_vote = #{foodVote}</if>
+            <if test="foodPrice != null  and foodPrice != ''"> and food_price = #{foodPrice}</if>
+            <if test="foodDiscount != null  and foodDiscount != ''"> and food_discount = #{foodDiscount}</if>
+            <if test="foodDesc != null  and foodDesc != ''"> and food_desc = #{foodDesc}</if>
+            <if test="foodStatus != null  and foodStatus != ''"> and food_status = #{foodStatus}</if>
+            <if test="foodType != null  and foodType != ''"> and food_type = #{foodType}</if>
+            <if test="foodCategory != null  and foodCategory != ''"> and food_category = #{foodCategory}</if>
+            <if test="foodSrc != null  and foodSrc != ''"> and food_src = #{foodSrc}</if>
+        </where>
+    </select>
+    
+    <select id="selectFoodByFoodId" parameterType="Long" resultMap="FoodResult">
+        <include refid="selectFoodVo"/>
+        where food_id = #{foodId}
+    </select>
+        
+    <insert id="insertFood" parameterType="Food" useGeneratedKeys="true" keyProperty="foodId">
+        insert into food
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="foodName != null and foodName != ''">food_name,</if>
+            <if test="foodStar != null and foodStar != ''">food_star,</if>
+            <if test="foodVote != null and foodVote != ''">food_vote,</if>
+            <if test="foodPrice != null and foodPrice != ''">food_price,</if>
+            <if test="foodDiscount != null and foodDiscount != ''">food_discount,</if>
+            <if test="foodDesc != null and foodDesc != ''">food_desc,</if>
+            <if test="foodStatus != null and foodStatus != ''">food_status,</if>
+            <if test="foodType != null and foodType != ''">food_type,</if>
+            <if test="foodCategory != null and foodCategory != ''">food_category,</if>
+            <if test="foodSrc != null and foodSrc != ''">food_src,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="foodName != null and foodName != ''">#{foodName},</if>
+            <if test="foodStar != null and foodStar != ''">#{foodStar},</if>
+            <if test="foodVote != null and foodVote != ''">#{foodVote},</if>
+            <if test="foodPrice != null and foodPrice != ''">#{foodPrice},</if>
+            <if test="foodDiscount != null and foodDiscount != ''">#{foodDiscount},</if>
+            <if test="foodDesc != null and foodDesc != ''">#{foodDesc},</if>
+            <if test="foodStatus != null and foodStatus != ''">#{foodStatus},</if>
+            <if test="foodType != null and foodType != ''">#{foodType},</if>
+            <if test="foodCategory != null and foodCategory != ''">#{foodCategory},</if>
+            <if test="foodSrc != null and foodSrc != ''">#{foodSrc},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFood" parameterType="Food">
+        update food
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="foodName != null and foodName != ''">food_name = #{foodName},</if>
+            <if test="foodStar != null and foodStar != ''">food_star = #{foodStar},</if>
+            <if test="foodVote != null and foodVote != ''">food_vote = #{foodVote},</if>
+            <if test="foodPrice != null and foodPrice != ''">food_price = #{foodPrice},</if>
+            <if test="foodDiscount != null and foodDiscount != ''">food_discount = #{foodDiscount},</if>
+            <if test="foodDesc != null and foodDesc != ''">food_desc = #{foodDesc},</if>
+            <if test="foodStatus != null and foodStatus != ''">food_status = #{foodStatus},</if>
+            <if test="foodType != null and foodType != ''">food_type = #{foodType},</if>
+            <if test="foodCategory != null and foodCategory != ''">food_category = #{foodCategory},</if>
+            <if test="foodSrc != null and foodSrc != ''">food_src = #{foodSrc},</if>
+        </trim>
+        where food_id = #{foodId}
+    </update>
+
+    <delete id="deleteFoodByFoodId" parameterType="Long">
+        delete from food where food_id = #{foodId}
+    </delete>
+
+    <delete id="deleteFoodByFoodIds" parameterType="String">
+        delete from food where food_id in 
+        <foreach item="foodId" collection="array" open="(" separator="," close=")">
+            #{foodId}
+        </foreach>
+    </delete>
+</mapper>

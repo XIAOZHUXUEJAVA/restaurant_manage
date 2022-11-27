@@ -113,6 +113,9 @@ public class FileUploadUtils
         String fileName = extractFilename(file);
 
         String absPath = getAbsoluteFile(baseDir, fileName).getAbsolutePath();
+        System.out.println("==========================");
+        System.out.println(absPath);
+        System.out.println("==========================");
         file.transferTo(Paths.get(absPath));
         return getPathFileName(baseDir, fileName);
     }
@@ -144,6 +147,10 @@ public class FileUploadUtils
     {
         int dirLastIndex = RuoYiConfig.getProfile().length() + 1;
         String currentDir = StringUtils.substring(uploadDir, dirLastIndex);
+        System.out.println("===================");
+        System.out.println(currentDir);
+        System.out.println("===================");
+        System.out.println(Constants.RESOURCE_PREFIX + "/" + currentDir + "/" + fileName);
         return Constants.RESOURCE_PREFIX + "/" + currentDir + "/" + fileName;
     }
 

@@ -75,7 +75,7 @@ public class RuoYiConfig
 
     public static String getProfile()
     {
-        return profile;
+        return "D:\\Desktop\\web\\restaurant-ordering-system\\frontend\\src\\assets\\images\\profile";
     }
 
     public void setProfile(String profile)
