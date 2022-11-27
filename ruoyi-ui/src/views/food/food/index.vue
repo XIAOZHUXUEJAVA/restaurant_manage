@@ -49,6 +49,24 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="状态" prop="foodStatus">
+        <el-input
+          v-model="queryParams.foodStatus"
+          placeholder="请输入状态"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+
+      <el-form-item label="类型" prop="foodType">
+        <el-input
+          v-model="queryParams.foodType"
+          placeholder="请输入类型"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+
       <el-form-item label="种类" prop="foodCategory">
         <el-input
           v-model="queryParams.foodCategory"
@@ -145,7 +163,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -175,9 +193,38 @@
         <el-form-item label="份量" prop="foodDesc">
           <el-input v-model="form.foodDesc" placeholder="请输入份量" />
         </el-form-item>
-        <el-form-item label="种类" prop="foodCategory">
-          <el-input v-model="form.foodCategory" placeholder="请输入种类" />
+        <el-form-item label="状态" prop="foodStatus">
+          <el-select v-model="form.foodStatus" >
+            <el-option label="请选择" value=""></el-option>
+            <el-option label="热销" value="best seller"></el-option>
+            <el-option label="普通" value="normal"></el-option>
+<!--            <el-option v-for="item in status" :key="item.id" :label="item.name" :value="item.id">-->
+<!--            </el-option>-->
+          </el-select>
         </el-form-item>
+
+
+        <el-form-item label="类型" prop="foodType">
+          <el-select v-model="form.foodType" >
+            <el-option label="请选择" value=""></el-option>
+            <el-option label="肉类" value="meat"></el-option>
+            <el-option label="素类" value="vegan"></el-option>
+            <!--            <el-option v-for="item in status" :key="item.id" :label="item.name" :value="item.id">-->
+            <!--            </el-option>-->
+          </el-select>
+        </el-form-item>
+
+
+        <el-form-item label="种类" prop="foodCategory">
+          <el-select v-model="form.foodCategory" >
+            <el-option label="请选择" value=""></el-option>
+            <el-option label="塔克" value="taco"></el-option>
+            <el-option label="小吃" value="sides"></el-option>
+            <!--            <el-option v-for="item in status" :key="item.id" :label="item.name" :value="item.id">-->
+            <!--            </el-option>-->
+          </el-select>
+        </el-form-item>
+
         <el-form-item label="参考图">
           <image-upload v-model="form.foodSrc"/>
         </el-form-item>
@@ -215,6 +262,15 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // status: ['best_seller', 'normal', 'new dishes'],
+      status: [{
+        id: 1,
+        name: 'best_seller'
+      },
+        {
+          id: 2,
+          name: 'normal'
+        }],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -259,7 +315,7 @@ export default {
           { required: true, message: "类型不能为空", trigger: "change" }
         ],
         foodCategory: [
-          { required: true, message: "种类不能为空", trigger: "blur" }
+          { required: true, message: "种类不能为空", trigger: "change" }
         ],
         foodSrc: [
           { required: true, message: "参考图不能为空", trigger: "blur" }
