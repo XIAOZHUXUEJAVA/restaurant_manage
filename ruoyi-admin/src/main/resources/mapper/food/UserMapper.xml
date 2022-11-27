@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.food.mapper.UserMapper">
+    
+    <resultMap type="User" id="UserResult">
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="userEmail"    column="user_email"    />
+        <result property="userPhone"    column="user_phone"    />
+        <result property="userPassword"    column="user_password"    />
+        <result property="userBirth"    column="user_birth"    />
+        <result property="userGender"    column="user_gender"    />
+    </resultMap>
+
+    <sql id="selectUserVo">
+        select user_id, user_name, user_email, user_phone, user_password, user_birth, user_gender from user
+    </sql>
+
+    <select id="selectUserList" parameterType="User" resultMap="UserResult">
+        <include refid="selectUserVo"/>
+        <where>  
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="userEmail != null  and userEmail != ''"> and user_email = #{userEmail}</if>
+            <if test="userPhone != null  and userPhone != ''"> and user_phone = #{userPhone}</if>
+            <if test="userPassword != null  and userPassword != ''"> and user_password = #{userPassword}</if>
+            <if test="userBirth != null  and userBirth != ''"> and user_birth = #{userBirth}</if>
+            <if test="userGender != null  and userGender != ''"> and user_gender = #{userGender}</if>
+        </where>
+    </select>
+    
+    <select id="selectUserByUserId" parameterType="Long" resultMap="UserResult">
+        <include refid="selectUserVo"/>
+        where user_id = #{userId}
+    </select>
+        
+    <insert id="insertUser" parameterType="User" useGeneratedKeys="true" keyProperty="userId">
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userName != null and userName != ''">user_name,</if>
+            <if test="userEmail != null and userEmail != ''">user_email,</if>
+            <if test="userPhone != null and userPhone != ''">user_phone,</if>
+            <if test="userPassword != null and userPassword != ''">user_password,</if>
+            <if test="userBirth != null and userBirth != ''">user_birth,</if>
+            <if test="userGender != null and userGender != ''">user_gender,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userName != null and userName != ''">#{userName},</if>
+            <if test="userEmail != null and userEmail != ''">#{userEmail},</if>
+            <if test="userPhone != null and userPhone != ''">#{userPhone},</if>
+            <if test="userPassword != null and userPassword != ''">#{userPassword},</if>
+            <if test="userBirth != null and userBirth != ''">#{userBirth},</if>
+            <if test="userGender != null and userGender != ''">#{userGender},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUser" parameterType="User">
+        update user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userName != null and userName != ''">user_name = #{userName},</if>
+            <if test="userEmail != null and userEmail != ''">user_email = #{userEmail},</if>
+            <if test="userPhone != null and userPhone != ''">user_phone = #{userPhone},</if>
+            <if test="userPassword != null and userPassword != ''">user_password = #{userPassword},</if>
+            <if test="userBirth != null and userBirth != ''">user_birth = #{userBirth},</if>
+            <if test="userGender != null and userGender != ''">user_gender = #{userGender},</if>
+        </trim>
+        where user_id = #{userId}
+    </update>
+
+    <delete id="deleteUserByUserId" parameterType="Long">
+        delete from user where user_id = #{userId}
+    </delete>
+
+    <delete id="deleteUserByUserIds" parameterType="String">
+        delete from user where user_id in 
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+</mapper>
