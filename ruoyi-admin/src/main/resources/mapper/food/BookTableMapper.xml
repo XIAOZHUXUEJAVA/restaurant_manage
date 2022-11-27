@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.food.mapper.BookTableMapper">
+    
+    <resultMap type="BookTable" id="BookTableResult">
+        <result property="bookId"    column="book_id"    />
+        <result property="bookName"    column="book_name"    />
+        <result property="bookPhone"    column="book_phone"    />
+        <result property="bookPeople"    column="book_people"    />
+        <result property="bookTables"    column="book_tables"    />
+        <result property="userId"    column="user_id"    />
+        <result property="bookWhen"    column="book_when"    />
+        <result property="bookNote"    column="book_note"    />
+    </resultMap>
+
+    <sql id="selectBookTableVo">
+        select book_id, book_name, book_phone, book_people, book_tables, user_id, book_when, book_note from booktable
+    </sql>
+
+    <select id="selectBookTableList" parameterType="BookTable" resultMap="BookTableResult">
+        <include refid="selectBookTableVo"/>
+        <where>  
+            <if test="bookName != null  and bookName != ''"> and book_name like concat('%', #{bookName}, '%')</if>
+            <if test="bookPhone != null  and bookPhone != ''"> and book_phone = #{bookPhone}</if>
+            <if test="bookPeople != null "> and book_people = #{bookPeople}</if>
+            <if test="bookTables != null "> and book_tables = #{bookTables}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="bookWhen != null  and bookWhen != ''"> and book_when = #{bookWhen}</if>
+            <if test="bookNote != null  and bookNote != ''"> and book_note = #{bookNote}</if>
+        </where>
+    </select>
+    
+    <select id="selectBookTableByBookId" parameterType="Long" resultMap="BookTableResult">
+        <include refid="selectBookTableVo"/>
+        where book_id = #{bookId}
+    </select>
+        
+    <insert id="insertBookTable" parameterType="BookTable" useGeneratedKeys="true" keyProperty="bookId">
+        insert into booktable
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bookName != null and bookName != ''">book_name,</if>
+            <if test="bookPhone != null and bookPhone != ''">book_phone,</if>
+            <if test="bookPeople != null">book_people,</if>
+            <if test="bookTables != null">book_tables,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="bookWhen != null and bookWhen != ''">book_when,</if>
+            <if test="bookNote != null and bookNote != ''">book_note,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bookName != null and bookName != ''">#{bookName},</if>
+            <if test="bookPhone != null and bookPhone != ''">#{bookPhone},</if>
+            <if test="bookPeople != null">#{bookPeople},</if>
+            <if test="bookTables != null">#{bookTables},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="bookWhen != null and bookWhen != ''">#{bookWhen},</if>
+            <if test="bookNote != null and bookNote != ''">#{bookNote},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBookTable" parameterType="BookTable">
+        update booktable
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bookName != null and bookName != ''">book_name = #{bookName},</if>
+            <if test="bookPhone != null and bookPhone != ''">book_phone = #{bookPhone},</if>
+            <if test="bookPeople != null">book_people = #{bookPeople},</if>
+            <if test="bookTables != null">book_tables = #{bookTables},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="bookWhen != null and bookWhen != ''">book_when = #{bookWhen},</if>
+            <if test="bookNote != null and bookNote != ''">book_note = #{bookNote},</if>
+        </trim>
+        where book_id = #{bookId}
+    </update>
+
+    <delete id="deleteBookTableByBookId" parameterType="Long">
+        delete from booktable where book_id = #{bookId}
+    </delete>
+
+    <delete id="deleteBookTableByBookIds" parameterType="String">
+        delete from booktable where book_id in 
+        <foreach item="bookId" collection="array" open="(" separator="," close=")">
+            #{bookId}
+        </foreach>
+    </delete>
+</mapper>
